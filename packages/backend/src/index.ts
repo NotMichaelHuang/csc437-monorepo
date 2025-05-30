@@ -5,6 +5,7 @@ import { connectMongo, mongoClient} from "./connectMongo";
 import { ValidRoutes } from "./shared/validRoute";
 import { fetchDataFromServer, IApiImageData} from "./common/ApiImageData";
 import { ImageProvider } from "./imageProvider";
+import { registerImageRoutes } from "./routes/imageRoutes"
 import express, { Request, Response, NextFunction} from "express";
 import path from 'path';
 
@@ -18,41 +19,13 @@ app.use(express.json());
 const DB_NAME = process.env.DB_NAME;
 if (!DB_NAME) {throw new Error("Missing DB_NAME in .env");}
 
-function pause(ms: number) {
-  return new Promise<void>(r => setTimeout(r, ms));
-}
 
 async function start() {
   try {
     const db = await connectMongo();
-    const imageProvider = new ImageProvider(mongoClient);
+    const imageProvider = new ImageProvider(mongoClient); 
 
-    app.get("/api/images", async (req: Request, res: Response) => {
-      console.log("/api/images hit, delaying 2s…");
-      await pause(2000);
-
-      try{
-        console.log("/api/images fetching from MonogoDB");
-        const docs = await imageProvider.getAllImages();
-
-       const payload: IApiImageData[] = docs.map(doc => ({
-        id: doc._id.toHexString(),
-        src:  doc.src, 
-        name: doc.name,
-        author: { 
-          id: doc.authorId, 
-          username: doc.authorId }
-        })
-      );
-      res.json(payload);
-    }
-    catch(err)
-    {
-      console.error("Error fetching images:", err);
-      res.sendStatus(500);
-    }
-  }
-  );
+    registerImageRoutes(app, imageProvider)
 
     app.put( "/api/images/:id", (req: Request<{ id: string }, IApiImageData, { name: string }>, res: Response, next: NextFunction) => {
         const { id } = req.params;

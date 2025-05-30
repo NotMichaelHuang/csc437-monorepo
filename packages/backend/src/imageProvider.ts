@@ -7,6 +7,17 @@ interface IImageDocument {
     authorId: string;   // who uploaded it
 }
 
+export interface IApiImageData {
+    _id: string;
+    src: string;
+    name: string;
+    author: {
+        id: string;
+        username: string;
+        email?: string;
+    }
+}
+
 export class ImageProvider {
     private collection: Collection<IImageDocument>
 
@@ -21,5 +32,7 @@ export class ImageProvider {
     getAllImages() {
         return this.collection.find().toArray(); // Without any options, will by default get all documents in the collection as an array.
     }
+
+    async getAllWithAuthors(): Promise<IApiImageData[]>
 }
 
