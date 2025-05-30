@@ -5,6 +5,14 @@ GET http://localhost:3000/api/images
 ### Search images by name substring
 GET http://localhost:3000/api/images?query=silas_meow
 
+### Edit an image’s name
+PATCH http://localhost:3000/api/images/6839182680216770945be615
+Content-Type: application/json
+
+{
+  "name": "New Blue Merle Herding Sheep"
+}
+
 
 ### A second example.  Each request must be delimited by a triple hash
 POST http://localhost:3000/api/test
@@ -12,4 +20,28 @@ Content-Type: application/json # Content-Type header is a must if you're sending
 # Request body separated from headers by newline
 
 { "a": 1, "b": 2 }
+
+### 1) Invalid ObjectId → 404 “Image doesn’t exist”
+PATCH http://localhost:3000/api/images/not-a-valid-id
+Content-Type: application/json
+
+{
+  "name": "Doesn't matter"
+}
+
+### 2) Missing/Bad `name` in body → 400 “Bad Request”
+PATCH http://localhost:3000/api/images/6839182680216770945be615
+Content-Type: application/json
+
+# Missing name entirely:
+{}
+
+### 3) Name too long (>100 chars) → 422 “Unprocessable Entity”
+PATCH http://localhost:3000/api/images/6839182680216770945be615
+Content-Type: application/json
+
+# 101-character string:
+{
+  "name": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}
 

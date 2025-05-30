@@ -12,26 +12,24 @@ export function registerImageRoutes(app: express.Application, imageProvider: Ima
 
       // grab ?query=foo
       const raw = req.query.query;
-      const query = typeof raw === "string" ? raw.trim() : "";
+      const query = typeof raw === "string" ? raw.trim() : undefined;
       console.log("Image search query:", query);
 
       try{
         console.log("/api/images fetching from MongoDB");
-        const docs = await imageProvider.getAllImages();
+        let docs = await imageProvider.getImages(query);
+        console.log(docs.length);
 
-        const filtered = docs.filter(doc => doc.authorId.toLowerCase().includes(query.toLowerCase()));
-        console.log(filtered.length);
-
-        const payload = filtered.map(doc => ({
-            id: doc._id.toHexString(), 
-            src:  doc.src, 
-            name: doc.name, 
-            author: { 
-                id: doc.authorId, 
-                username: doc.authorId 
-            }
-        }));
-       res.json(payload);
+        /*
+        if(query)
+        {
+            docs = docs.filter(doc => doc.author.username.toLowerCase().includes(query.toLowerCase()));
+            console.log(docs.length);
+        } 
+        */
+ 
+        console.log("Final pipeline:", JSON.stringify(docs, null, 2))
+        res.json(docs);
     }
     catch(err)
     {
@@ -39,4 +37,32 @@ export function registerImageRoutes(app: express.Application, imageProvider: Ima
       res.sendStatus(500);
     }
   });
+
+    app.patch("/api/images/:id", express.json(), async (req: Request, res: Response) => {
+            const { id } = req.params;
+            const { name } = req.body;
+
+            if (!name) {
+                res.status(404).send("name require");
+                return;
+            }
+
+            try {
+                const count = await imageProvider.updateName(id, name);
+                if (count === 0){
+                    res.status(404).send("Image not found");
+                    return;
+                }
+                res.sendStatus(204);
+                return;
+            }
+            catch (err)
+            {
+                console.error(err);
+                res.sendStatus(500);
+                return;
+            }
+        }
+    )
+
 }

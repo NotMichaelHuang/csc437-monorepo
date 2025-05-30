@@ -14,7 +14,7 @@ const STATIC_DIR = process.env.STATIC_DIR || "public";
 
 const app = express();
 app.use(express.static(STATIC_DIR));
-app.use(express.json());
+app.use(express.json()); // Every new incoming JSON is parsed
 
 const DB_NAME = process.env.DB_NAME;
 if (!DB_NAME) {throw new Error("Missing DB_NAME in .env");}

@@ -15,7 +15,7 @@ export function ImageNameEditor(props: INameEditorProps) {
         const res = await fetch(
             `/api/images/${props.imageId}`,
             {
-                method: "PUT",
+                method: "PATCH",
                 headers: { "Content-Type": "application/json"},
                 body: JSON.stringify({ name: input}),
             }
