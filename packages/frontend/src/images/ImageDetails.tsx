@@ -19,7 +19,7 @@ export function ImageDetails({ images, loading, setImages, error }: IImageDetail
     }
 
     function handleSave(newName: string){
-        setImages((prev) => prev.map((i) => i.id === imageId ? {...i, author: {...i.author, username: newName}}: i));
+        setImages((prev) => prev.map((img) => img.id === imageId ? {...img, name: newName}: img));
     }
 
     return (

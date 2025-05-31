@@ -26,9 +26,8 @@ export function registerImageRoutes(app: express.Application, imageProvider: Ima
             docs = docs.filter(doc => doc.author.username.toLowerCase().includes(query.toLowerCase()));
             console.log(docs.length);
         } 
-        */
- 
-        console.log("Final pipeline:", JSON.stringify(docs, null, 2))
+        */ 
+        // console.log("Final pipeline:", JSON.stringify(docs, null, 2))
         res.json(docs);
     }
     catch(err)
