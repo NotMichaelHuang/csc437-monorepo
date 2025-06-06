@@ -13,7 +13,6 @@ Content-Type: application/json
   "name": "New Blue Merle Herding Sheep"
 }
 
-
 ### A second example.  Each request must be delimited by a triple hash
 POST http://localhost:3000/api/test
 Content-Type: application/json # Content-Type header is a must if you're sending JSON
@@ -44,4 +43,10 @@ Content-Type: application/json
 {
   "name": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
 }
+
+### New user registration
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{ "username": "Michael", "password": "testing" }
 

@@ -10,9 +10,15 @@ export default defineConfig({
             // Forward all requests from localhost:5173/api/* to localhost:3000/api/*
             "/api/": {
                 target: "http://localhost:3000",
-                changeOrigin: true
-
+                changeOrigin: true,
+                secure: false
+            },
+            "/auth/": {
+                target: "http://localhost:3000",
+                changeOrigin: true,
+                secure: false
             }
         }
     }
 });
+

@@ -4,6 +4,7 @@ import { useState } from "react";
 interface INameEditorProps {
     initialValue: string;
     imageId: string;
+    authToken: string | null;
     onSave: (newName: string) => void;
 }
 
@@ -16,7 +17,10 @@ export function ImageNameEditor(props: INameEditorProps) {
             `/api/images/${props.imageId}`,
             {
                 method: "PATCH",
-                headers: { "Content-Type": "application/json"},
+                headers: { 
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${props.authToken}`
+                },
                 body: JSON.stringify({ name: input}),
             }
         )
@@ -25,7 +29,6 @@ export function ImageNameEditor(props: INameEditorProps) {
             console.error("Update failed: ", await res.text());
             return;
         }
-
         props.onSave(input);
         setIsEditingName(false);
     }
