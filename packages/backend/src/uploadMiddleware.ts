@@ -11,7 +11,6 @@ class ImageFormatError extends Error {
 }
 
 const IMAGE_UPLOAD_DIR = process.env.IMAGE_UPLOAD_DIR || "uploads";
-
 if (!fs.existsSync(IMAGE_UPLOAD_DIR)) {
   fs.mkdirSync(IMAGE_UPLOAD_DIR, { recursive: true });
 }

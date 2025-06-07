@@ -7,16 +7,23 @@ interface IImageGridProps {
 }
 
 export function ImageGrid(props: IImageGridProps) {
-    const imageElements = props.images.map((image) => (
-        <div key={image.id} className="ImageGrid-photo-container">
-            <Link to={"/images/" + image.id}>
-                <img src={image.src} alt={image.name}/>
-            </Link>
-        </div>
-    ));
+    // TODO
+    console.log("All images received from backend:", props.images);
+    const imageElements = props.images.map((image) => {
+        // TODO
+        console.log("Rendering image:", image.src);
+        return (
+            <div key={image.id} className="ImageGrid-photo-container">
+                <Link to={"/images/" + image.id}>
+                    <img src={image.src} alt={image.name}/>
+                </Link>
+            </div>
+        );
+    });
     return (
         <div className="ImageGrid">
             {imageElements}
         </div>
     );
 }
+

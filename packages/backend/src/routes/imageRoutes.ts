@@ -16,6 +16,7 @@ export function registerImageRoutes(app: express.Application, imageProvider: Ima
     console.log("Image search query:", nameFilter || "(none)");
 
     try{
+      // TODO
       console.log("/api/images fetching from MongoDB");
       const docs = await imageProvider.getImages(nameFilter);
       console.log("Doc Length: ", docs.length); 
@@ -25,6 +26,17 @@ export function registerImageRoutes(app: express.Application, imageProvider: Ima
       res.sendStatus(500);
     }
   }); 
+
+  app.get("/api/images/raw", async (req: Request, res: Response) => {
+    try {
+      const docs = await imageProvider.getAllImages();
+      res.json(docs);
+    } catch (err) {
+      console.error("Error fetching raw images:", err);
+      res.sendStatus(500);
+    }
+  });
+
 
   app.patch("/api/images/:id", express.json(), async (req: Request, res: Response) => {
     const { id } = req.params;

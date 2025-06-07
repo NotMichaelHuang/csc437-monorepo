@@ -21,6 +21,7 @@ const STATIC_DIR = process.env.STATIC_DIR || "public";
 const app = express();
 app.use(express.static(STATIC_DIR));
 app.use(express.json()); // Every new incoming JSON is parsed
+app.use("/uploads", express.static("uploads"));
 
 const jwtSecret = process.env.JWT_SECRET;
 if (!jwtSecret) {
@@ -40,8 +41,7 @@ async function start() {
     registerAuthRoutes(app);
     app.use("/api/*", verifyAuthToken);
     registerImageRoutes(app, imageProvider);    
-    registerUploadRoutes(app, imageProvider); 
-    app.use("/uploads", express.static("uploads"));
+    registerUploadRoutes(app, imageProvider);  
 
     app.put( "/api/images/:id", (req: Request<{ id: string }, IApiImageData, { name: string }>, res: Response, next: NextFunction) => {
         const { id } = req.params;
